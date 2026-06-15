@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>co.za.OddEase</groupId>
-    <artifactId>OddEase</artifactId>
+    <artifactId>springBoot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>OddEase</name>
-    <description>OddEase</description>
+    <name>springBoot</name>
+    <description>springBoot</description>
     <url/>
     <licenses>
         <license/>
@@ -37,10 +37,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webmvc</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>va</groupId>
-            <artifactId>validation</artifactId>
         </dependency>
 
         <dependency>

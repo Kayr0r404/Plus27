@@ -1,14 +1,10 @@
-/*
- * OddEase Spring Boot context-load test.
- */
-
-package co.za.oddease.oddease;
+package co.za.oddease.springboot;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class OddEaseApplicationTests {
+class ApplicationTests {
 
     @Test
     void contextLoads() {
