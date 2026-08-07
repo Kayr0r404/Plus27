@@ -203,3 +203,4 @@ The API will be available at `http://localhost:8000`. Interactive docs at `http:
 - **pwdlib** – Argon2 password hashing
 - **pydantic-settings** – environment config
 - **uvicorn** – ASGI server
+test
