@@ -4,9 +4,9 @@ Provides create, read, update, delete, and list operations for users,
 with authorisation checks and duplicate-email validation.
 """
 
-from typing import Annotated, Any, List
+from typing import List
 
-from fastapi import Depends, Header, HTTPException, Request, status
+from fastapi import Depends, HTTPException, Request, status
 
 from ....schemas.user_schema import CreateUser, PrivateUser, PublicUser
 from shared.repositories.factory import get_user_repository
@@ -39,7 +39,7 @@ async def update_user(
     user_id: str,
     data: PrivateUser,
     user_repo: MongoUserRepository = Depends(get_user_repository),
-    current_user: Annotated[PrivateUser | None, Depends(CurrentUser)] = None,
+    current_user: CurrentUser = None,
 ) -> PrivateUser:
     if str(current_user.id) != user_id:
         raise HTTPException(
@@ -68,7 +68,7 @@ async def update_user(
 async def delete_user(
     user_id: str,
     user_repo: MongoUserRepository = Depends(get_user_repository),
-    current_user_id: Annotated[str, Depends(CurrentUser)] = None,
+    current_user: CurrentUser = None,
 ) -> bool:
     if str(current_user.id) != user_id:
         raise HTTPException(

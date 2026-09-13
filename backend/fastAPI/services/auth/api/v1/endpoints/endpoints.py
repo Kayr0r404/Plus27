@@ -5,10 +5,9 @@ HttpOnly JWT cookies (access + refresh) along with a CSRF token.
 """
 
 from datetime import timedelta
-from typing import Annotated
 import secrets
 
-from fastapi import Depends, HTTPException, Request, status
+from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -33,7 +32,7 @@ def logout():
 
 
 async def get_me(
-    current_user: Annotated[object, Depends(CurrentUser)] = None,
+    current_user: CurrentUser,
 ):
     if current_user is None:
         raise HTTPException(
