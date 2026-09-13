@@ -67,7 +67,7 @@ def verify_access_token(token: str) -> str:
         )
     except jwt.ExpiredSignatureError:
         raise HTTPException(
-            status_code=status.HTTP_401UNAUTHORIZED,
+            status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Token Expired.",
             headers={"WWW-Authenticate": "Bearer"},
         )
@@ -118,8 +118,8 @@ def verify_refresh_token(refresh_token: str) -> str | None:
     try:
         payload = jwt.decode(
             refresh_token,
-            settings.refresh_token_key.get_secret_value(),
-            algorithms=[settings.algoritm],
+            settings.refresh_key.get_secret_value(),
+            algorithms=[settings.algorithm],
         )
     except jwt.ExpiredSignatureError:
         return None

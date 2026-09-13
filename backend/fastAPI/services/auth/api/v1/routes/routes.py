@@ -1,13 +1,22 @@
 """Auth API route definitions.
 
-Registers /token, /refresh, and /logout endpoints under /auth.
+Registers /me, /token, /refresh, and /logout endpoints under /auth.
 """
 
 from fastapi import APIRouter, status
 
 from ..endpoints import endpoints
+from shared.route_guard import public_route
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
+
+router.add_api_route(
+    "/me",
+    endpoints.get_me,
+    methods=["GET"],
+    status_code=status.HTTP_200_OK,
+    **public_route(throttle_scope="auth.me"),
+)
 
 router.add_api_route(
     "/token",

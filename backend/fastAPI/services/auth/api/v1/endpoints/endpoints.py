@@ -19,12 +19,38 @@ from shared.auth import (
     verify_password,
     verify_access_token,
     verify_refresh_token,
+    CurrentUser,
 )
 from shared.repositories.factory import get_user_repository
 from ....schemas.schemas import LoginSchema
 
 
-def logout(): ...
+def logout():
+    response = JSONResponse(content={"message": "logged out successfully"})
+    for key in ("access_token", "refresh_token", "csrf_token"):
+        response.delete_cookie(key=key, path="/", secure=True, samesite="lax")
+    return response
+
+
+async def get_me(
+    current_user: Annotated[object, Depends(CurrentUser)] = None,
+):
+    if current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+        )
+
+    return {
+        "id": str(current_user.id),
+        "email": str(current_user.email),
+        "first_name": current_user.first_name,
+        "last_name": current_user.last_name,
+        "username": current_user.username,
+        "avatar_url": current_user.avatar_url,
+        "sex": current_user.sex,
+    }
+
+
 async def login_for_access_token(
     form_data: LoginSchema,
 ):
@@ -36,7 +62,7 @@ async def login_for_access_token(
         form_data.password, existing_user.hashed_password
     ):
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorect credentials"
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect credentials"
         )
 
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)

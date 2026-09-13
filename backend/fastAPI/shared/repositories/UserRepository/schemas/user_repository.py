@@ -15,8 +15,9 @@ class PrivateUserRecord(BaseModel):
     first_name: str
     last_name: str
     username: str
+    hashed_password: str
     avatar_url: str | None = None
-    sex: Literal["Male", "Female"]
+    sex: Literal["Male", "Female"] | None = None
 
 
 class PublicUserRecord(BaseModel):
@@ -25,7 +26,7 @@ class PublicUserRecord(BaseModel):
     last_name: str
     username: str
     avatar_url: str | None = None
-    sex: Literal["Male", "Female"]
+    sex: Literal["Male", "Female"] | None = None
 
 
 class UserRepository(Protocol):

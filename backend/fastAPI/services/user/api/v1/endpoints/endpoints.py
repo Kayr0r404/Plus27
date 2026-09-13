@@ -41,7 +41,7 @@ async def update_user(
     user_repo: MongoUserRepository = Depends(get_user_repository),
     current_user: Annotated[PrivateUser | None, Depends(CurrentUser)] = None,
 ) -> PrivateUser:
-    if current_user.id != user_id:
+    if str(current_user.id) != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to complete this operation",
@@ -70,9 +70,9 @@ async def delete_user(
     user_repo: MongoUserRepository = Depends(get_user_repository),
     current_user_id: Annotated[str, Depends(CurrentUser)] = None,
 ) -> bool:
-    if current_user_id != user_id:
+    if str(current_user.id) != user_id:
         raise HTTPException(
-            status_code=status.status.HTTP_401_NOT_AUTHORIZED,
+            status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to complete this operation",
         )
 
@@ -120,4 +120,16 @@ async def get_users(
             status.HTTP_500_INTERNAL_SERVER_ERROR, "Failed to fetch users"
         )
 
-    return [PublicUser.model_validate(u) for u in users_data]
+    return [
+        PublicUser.model_validate(
+            {
+                "id": str(u.id),
+                "first_name": u.first_name,
+                "last_name": u.last_name,
+                "username": u.username,
+                "avatar_url": u.avatar_url,
+                "sex": u.sex,
+            }
+        )
+        for u in users_data
+    ]

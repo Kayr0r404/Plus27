@@ -19,6 +19,7 @@ app = FastAPI(description="OddEase API", lifespan=int_db_engine)
 
 origins = [
     "http://localhost",
+    "http://localhost:3000",
     "http://localhost:8080",
 ]
 
