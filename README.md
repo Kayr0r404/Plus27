@@ -1,19 +1,23 @@
-# OddEase
+# PLUS27
 
-A FastAPI-based backend application with dual-database support (PostgreSQL + MongoDB) and Spring Boot starter scaffolding.
+A FastAPI-based backend application with dual-database support (PostgreSQL + MongoDB) and javalin starter scaffolding.
 
 ## Architecture
 
 ```
-OddEase/
+plus27/
 ├── backend/
 │   ├── fastAPI/                   # Python FastAPI application
 │   │   ├── main.py                # Entry point – creates FastAPI app, registers routers
+│   │   ├── migrate.py             # Database initialization/migration script
 │   │   ├── .env.example           # Environment variable template
 │   │   ├── requirements.txt       # Python dependencies
 │   │   ├── shared/                # Shared modules (engine, models, auth, repositories)
 │   │   └── services/              # Domain services (auth, user)
-│   └── springBoot/OddEase/        # Spring Boot starter (Java, placeholder)
+│   └── javalin/plus27/            # javalin starter (Java, placeholder)
+├── frontend/                      # Next.js frontend
+├── docker-compose.yml             # PostgreSQL + MongoDB services for local development
+├── start.sh                       # Centralized startup/shutdown script
 └── README.md
 ```
 
@@ -162,37 +166,125 @@ Registers user endpoints under `/users`. All routes use `public_route()` guard.
 
 ---
 
-## Backend: Spring Boot (`backend/springBoot/`)
+## Backend: javalin (`backend/javalin/`)
 
-Minimal Spring Boot 3 application with a single starter class (`OddEaseApplication`) and a context-loads test. Currently a placeholder for future Java microservices.
+Minimal javalin 3 application with a single starter class (`plus27Application`) and a context-loads test. Currently a placeholder for future Java microservices.
 
 ## Running the Application
 
 ### Prerequisites
-- Python 3.11+
-- MongoDB
-- PostgreSQL
+- **Docker** + **Docker Compose** (recommended, for PostgreSQL and MongoDB)
+- **Python 3.11+** (3.14 may require dependency pin updates in `backend/fastAPI/requirements.txt`)
+- **Node.js** and **pnpm** (for the Next.js frontend)
+- Bash 4.3+ (for `./start.sh`)
 
-### Setup
+> If you do not use Docker, you can run PostgreSQL and MongoDB yourself, but `./start.sh` manages DB containers via `docker-compose.yml` by default.
+
+### Quick start (recommended)
+
+From the repository root:
 
 ```bash
-cd backend/fastAPI
-cp .env.example .env          # edit with your credentials
-pip install -r requirements.txt
-uvicorn main:app --reload
+./start.sh
 ```
 
-The API will be available at `http://localhost:8000`. Interactive docs at `http://localhost:8000/docs`.
+On the first run, if `backend/fastAPI/.env` does not exist, the script copies it from `.env.example` and exits so you can review/update credentials. After updating `.env`, re-run `./start.sh` (or set `ALLOW_DEFAULT_ENV=1` to continue with the copied defaults).
 
-### Environment Variables
+### What `./start.sh` does
+- Checks prerequisites and app ports (`8000`/`3000` by default)
+- Starts database containers with Docker Compose (`postgres`, `mongo`) when `docker-compose.yml` is available
+- Waits for PostgreSQL and MongoDB to be reachable
+- Creates/activates a Python virtual environment at `backend/fastAPI/.venv`
+- Installs backend dependencies (skips reinstall when `backend/fastAPI/requirements.txt` is unchanged)
+- Runs database initialization/migrations (`backend/fastAPI/migrate.py`)
+  - Creates PostgreSQL tables via SQLModel metadata
+  - Initializes MongoDB/Beanie models
+- Installs frontend dependencies (`pnpm install` in `frontend/`)
+- Starts the app servers with color-coded, prefixed logs:
+  - `[python]` FastAPI/Uvicorn
+  - `[next]` Next.js dev server
+  - HTTP methods and response status codes are highlighted in logs
+
+### Services and URLs
+- **Backend (FastAPI):** `http://127.0.0.1:8000`
+  - Docs: `http://127.0.0.1:8000/docs`
+  - Health check: `GET http://127.0.0.1:8000/health` → `{"status":"ok"}`
+  - API base path: `/api/v1` (e.g. `/api/v1/auth/token`, `/api/v1/users/register-new-account`)
+- **Frontend (Next.js):** `http://127.0.0.1:3000`
+- **Javalin (`backend/javalin`)**: placeholder, not started by `start.sh`
+
+### Stopping and data persistence
+- Press `Ctrl+C` to stop `./start.sh`.
+- The script shuts down app servers and runs `docker compose down` for DB containers.
+- **Database data is preserved** because `docker-compose.yml` uses named volumes (`postgres_data`, `mongo_data`). Containers are removed on teardown, but data remains for the next run.
+- To remove containers **and** persisted DB data, run manually:
+  ```bash
+  docker compose down -v
+  ```
+
+### Database containers (`docker-compose.yml`)
+`docker-compose.yml` defines:
+- **PostgreSQL** (`postgres:16-alpine`, container `plus27-postgres`, default port `5432`)
+- **MongoDB** (`mongo:7`, container `plus27-mongo`, default port `27017`)
+
+Defaults are aligned with `backend/fastAPI/.env.example` / `.env` (DB names, users, passwords, ports). You can manage DBs manually if needed:
+
+```bash
+docker compose up -d
+docker compose ps
+docker compose logs -f postgres mongo
+docker compose down        # keeps volumes/data
+```
+
+### Environment variables (`backend/fastAPI/.env`)
+`start.sh` reads backend config from `backend/fastAPI/.env` (copied from `.env.example` on first run if missing).
 
 | Variable | Description |
 |----------|-------------|
 | `SECRET_KEY` | JWT signing key for access tokens |
 | `REFRESH_KEY` | JWT signing key for refresh tokens |
-| `POSTGRES_DB_*` | PostgreSQL connection parameters |
-| `MONGO_DB_*` | MongoDB connection parameters |
+| `POSTGRES_DB_*` | PostgreSQL connection parameters (`NAME`, `HOST`, `PORT`, `USER`, `PASSWORD`) |
+| `MONGO_DB_*` | MongoDB connection parameters (`NAME`, `HOST`, `PORT`, `USER`, `PASSWORD`) |
 | `USER_DB_PROVIDER` | `mongo` (default) or `postgres` |
+| `REVIEW_DB_PROVIDER` / `LIKE_DB_PROVIDER` / `COMMENT_DB_PROVIDER` | Provider selectors for related services (as configured in `.env.example`) |
+
+### `start.sh` environment overrides
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BACKEND_PORT` / `FRONTEND_PORT` | `8000` / `3000` | App server ports |
+| `BACKEND_HOST` / `FRONTEND_HOST` | `127.0.0.1` / `127.0.0.1` | Bind addresses |
+| `NEXT_PUBLIC_API_URL` | `http://localhost:$BACKEND_PORT/api/v1` | Frontend API base URL (inlined into Next.js dev/build) |
+| `MANAGE_DB` | `1` | Set to `0` to skip starting/stopping DB containers via Docker Compose |
+| `SKIP_MIGRATE` | `0` | Set to `1` to skip `migrate.py` |
+| `ALLOW_DEFAULT_ENV` | `0` | Set to `1` to continue if `.env` was auto-copied from `.env.example` |
+| `CHECK_SERVICES` | empty | Space-separated `host:port` checks before migrations (e.g. `localhost:5432 localhost:27017`) |
+
+Example:
+```bash
+BACKEND_PORT=8001 FRONTEND_PORT=3001 ./start.sh
+```
+
+### Manual run (advanced)
+If you prefer to run components separately:
+
+```bash
+# 1) Start databases
+docker compose up -d
+
+# 2) Backend
+cd backend/fastAPI
+cp .env.example .env          # edit with your credentials
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python migrate.py
+uvicorn main:app --reload --host 127.0.0.1 --port 8000
+
+# 3) Frontend (new terminal)
+cd frontend
+pnpm install
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1 pnpm dev --port 3000
+```
 
 ## Key Dependencies
 
@@ -203,4 +295,3 @@ The API will be available at `http://localhost:8000`. Interactive docs at `http:
 - **pwdlib** – Argon2 password hashing
 - **pydantic-settings** – environment config
 - **uvicorn** – ASGI server
-test

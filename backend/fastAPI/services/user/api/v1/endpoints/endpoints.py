@@ -38,10 +38,10 @@ async def create_user(
 async def update_user(
     user_id: str,
     data: PrivateUser,
+    current_user: CurrentUser,
     user_repo: MongoUserRepository = Depends(get_user_repository),
-    current_user: CurrentUser = None,
 ) -> PrivateUser:
-    if str(current_user.id) != user_id:
+    if current_user is None or str(current_user.id) != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to complete this operation",
@@ -67,10 +67,10 @@ async def update_user(
 
 async def delete_user(
     user_id: str,
+    current_user: CurrentUser,
     user_repo: MongoUserRepository = Depends(get_user_repository),
-    current_user: CurrentUser = None,
 ) -> bool:
-    if str(current_user.id) != user_id:
+    if current_user is None or str(current_user.id) != user_id:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to complete this operation",

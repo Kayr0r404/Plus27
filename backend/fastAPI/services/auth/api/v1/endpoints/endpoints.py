@@ -9,25 +9,28 @@ import secrets
 
 from fastapi import HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
 
 from shared.confiq import settings
 from shared.auth import (
     create_access_token,
     create_refresh_token,
     verify_password,
-    verify_access_token,
-    verify_refresh_token,
     CurrentUser,
 )
 from shared.repositories.factory import get_user_repository
 from ....schemas.schemas import LoginSchema
 
 
-def logout():
+def _is_secure_request(request: Request) -> bool:
+    # Allow cookies to work on local HTTP during development.
+    return request.url.scheme == "https"
+
+
+def logout(request: Request):
     response = JSONResponse(content={"message": "logged out successfully"})
+    secure = _is_secure_request(request)
     for key in ("access_token", "refresh_token", "csrf_token"):
-        response.delete_cookie(key=key, path="/", secure=True, samesite="lax")
+        response.delete_cookie(key=key, path="/", secure=secure, samesite="lax")
     return response
 
 
@@ -52,6 +55,7 @@ async def get_me(
 
 async def login_for_access_token(
     form_data: LoginSchema,
+    request: Request,
 ):
 
     user_repository = get_user_repository()
@@ -71,13 +75,17 @@ async def login_for_access_token(
     refresh_token = create_refresh_token({"sub": str(existing_user.id)})
     csrf_token = secrets.token_hex(32)
 
+    secure = _is_secure_request(request)
+    # Use Lax for local/dev compatibility while keeping HttpOnly auth cookies.
+    cookie_samesite = "lax"
+
     response = JSONResponse(content={"message": "logged in successfully"})
     response.set_cookie(
         key="access_token",
         value=access_token,
         httponly=True,
-        secure=True,
-        samesite="strict",
+        secure=secure,
+        samesite=cookie_samesite,
         max_age=900,
         path="/",
     )
@@ -85,8 +93,8 @@ async def login_for_access_token(
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=True,
-        samesite="strict",
+        secure=secure,
+        samesite=cookie_samesite,
         max_age=60 * 60 * 24 * 30,
         path="/",
     )
@@ -94,7 +102,7 @@ async def login_for_access_token(
         key="csrf_token",
         value=csrf_token,
         httponly=False,
-        secure=True,
+        secure=secure,
         samesite="lax",
         max_age=900,
         path="/",

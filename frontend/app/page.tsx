@@ -3,13 +3,13 @@ import Link from "next/link";
 export default function Home() {
   return (
     <div className="flex w-full items-center justify-center bg-zinc-50 px-4 dark:bg-black">
-      <section className="flex w-full max-w-3xl flex-col items-center gap-10 py-24 text-center">
+      <section className="flex w-full max-w-3xl flex-col items-center gap-10 py-27 text-center">
         <div className="flex flex-col items-center gap-4">
           <h1 className="max-w-xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
             Your account, managed simply.
           </h1>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Create a Plus24 account to register, sign in, and manage your
+            Create a Plus27 account to register, sign in, and manage your
             profile — all in one place.
           </p>
         </div>

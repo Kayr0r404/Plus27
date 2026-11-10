@@ -8,7 +8,7 @@
         <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>co.za.OddEase</groupId>
+    <groupId>co.za.plus27</groupId>
     <artifactId>springBoot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>springBoot</name>

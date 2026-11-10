@@ -17,6 +17,12 @@ from services.auth.api.v1.routes.routes import router as auth_router
 
 app = FastAPI(description="OddEase API", lifespan=int_db_engine)
 
+
+@app.get("/health", tags=["health"])
+async def health_check():
+    """Liveness/health check endpoint."""
+    return {"status": "ok"}
+
 origins = [
     "http://localhost",
     "http://localhost:3000",

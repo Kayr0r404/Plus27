@@ -22,7 +22,7 @@ class PrivateUser(BaseModel):
     last_name: str
     username: str
     avatar_url: str | None = None
-    sex: Literal["Male", "Female"]
+    sex: Literal["Male", "Female"] | None = None
 
 
 class PublicUser(BaseModel):
@@ -31,4 +31,4 @@ class PublicUser(BaseModel):
     last_name: str
     username: str
     avatar_url: str | None = None
-    sex: Literal["Male", "Female"]
+    sex: Literal["Male", "Female"] | None = None

@@ -75,7 +75,7 @@ export default function RegisterPage() {
             Create your account
           </h1>
           <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Join Plus24 in under a minute.
+            Join Plus27 in under a minute.
           </p>
 
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">

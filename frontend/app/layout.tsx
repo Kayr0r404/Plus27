@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Plus24",
-  description: "Create an account and manage your Plus24 profile.",
+  title: "Plus27",
+  description: "Create an account and manage your Plus27 profile.",
 };
 
 export default function RootLayout({
@@ -32,7 +32,7 @@ export default function RootLayout({
         <header className="border-b border-zinc-200 dark:border-zinc-800">
           <nav className="mx-auto flex h-16 w-full max-w-3xl items-center justify-between px-4">
             <Link href="/" className="text-lg font-semibold tracking-tight">
-              Plus24
+              Plus27
             </Link>
             <div className="flex items-center gap-1 text-sm">
               <Link
