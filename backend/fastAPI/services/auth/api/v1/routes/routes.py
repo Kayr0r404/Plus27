@@ -28,8 +28,9 @@ router.add_api_route(
 router.add_api_route(
     "/refresh",
     endpoints.refresh_token,
-    methods=["Post"],
-    status_code=status.HTTP_201_CREATED,
+    methods=["POST"],
+    status_code=status.HTTP_200_OK,
+    **public_route(throttle_scope="auth.refresh"),
 )
 
 router.add_api_route(

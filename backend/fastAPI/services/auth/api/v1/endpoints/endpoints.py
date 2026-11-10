@@ -7,7 +7,7 @@ HttpOnly JWT cookies (access + refresh) along with a CSRF token.
 from datetime import timedelta
 import secrets
 
-from fastapi import HTTPException, Request, status
+from fastapi import Cookie, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 
 from shared.confiq import settings
@@ -15,6 +15,7 @@ from shared.auth import (
     create_access_token,
     create_refresh_token,
     verify_password,
+    verify_refresh_token,
     CurrentUser,
 )
 from shared.repositories.factory import get_user_repository
@@ -111,5 +112,47 @@ async def login_for_access_token(
     return response
 
 
-async def refresh_token(request: Request):
-    print(request)
+async def refresh_token(request: Request, refresh_token: str | None = Cookie(None)):
+    if not refresh_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token missing",
+        )
+
+    user_id = verify_refresh_token(refresh_token)
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired refresh token",
+        )
+
+    access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
+    new_access_token = create_access_token(
+        data={"sub": str(user_id)}, expires_delta=access_token_expires
+    )
+    new_csrf_token = secrets.token_hex(32)
+
+    secure = _is_secure_request(request)
+    cookie_samesite = "lax"
+
+    response = JSONResponse(content={"message": "token refreshed successfully"})
+    response.set_cookie(
+        key="access_token",
+        value=new_access_token,
+        httponly=True,
+        secure=secure,
+        samesite=cookie_samesite,
+        max_age=900,
+        path="/",
+    )
+    response.set_cookie(
+        key="csrf_token",
+        value=new_csrf_token,
+        httponly=False,
+        secure=secure,
+        samesite="lax",
+        max_age=900,
+        path="/",
+    )
+
+    return response

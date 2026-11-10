@@ -74,30 +74,74 @@ function extractDetail(payload: unknown): string {
 
 interface ApiFetchOptions extends RequestInit {
   skipCsrf?: boolean;
+  _retried?: boolean;
+}
+
+let refreshPromise: Promise<boolean> | null = null;
+
+async function refreshAccessToken(): Promise<boolean> {
+  if (!refreshPromise) {
+    refreshPromise = (async () => {
+      const headers = new Headers({ "Content-Type": "application/json" });
+      const csrf = getCookie("csrf_token");
+      if (csrf) headers.set("X-CSRF-Token", csrf);
+
+      try {
+        const res = await fetch(`${API_URL}/auth/refresh`, {
+          method: "POST",
+          headers,
+          credentials: "include",
+        });
+        return res.ok;
+      } catch {
+        return false;
+      }
+    })().finally(() => {
+      refreshPromise = null;
+    });
+  }
+
+  return refreshPromise;
 }
 
 async function apiFetch<T>(
   path: string,
   options: ApiFetchOptions = {},
 ): Promise<T> {
-  const method = (options.method ?? "GET").toUpperCase();
+  const { skipCsrf, _retried, headers: optionHeaders, ...fetchOptions } = options;
+  const method = (fetchOptions.method ?? "GET").toUpperCase();
   const isSafeMethod = ["GET", "HEAD", "OPTIONS"].includes(method);
-  const headers = new Headers(options.headers);
+  const headers = new Headers(optionHeaders);
 
-  if (options.body && !headers.has("Content-Type")) {
+  if (fetchOptions.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
 
-  if (options.skipCsrf !== true && !isSafeMethod) {
+  if (skipCsrf !== true && !isSafeMethod) {
     const csrf = getCookie("csrf_token");
     if (csrf) headers.set("X-CSRF-Token", csrf);
   }
 
   const res = await fetch(`${API_URL}${path}`, {
-    ...options,
+    ...fetchOptions,
     headers,
     credentials: "include",
   });
+
+  if (res.status === 401 && !_retried) {
+    const shouldAttemptRefresh = ![
+      "/auth/token",
+      "/auth/refresh",
+      "/users/register-new-account",
+    ].includes(path);
+
+    if (shouldAttemptRefresh) {
+      const refreshed = await refreshAccessToken();
+      if (refreshed) {
+        return apiFetch<T>(path, { ...options, _retried: true });
+      }
+    }
+  }
 
   const payload: unknown = await res.json().catch(() => null);
 
