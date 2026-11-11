@@ -136,18 +136,24 @@ export default function Navbar() {
             {loading ? (
               <div className="hidden h-9 w-24 animate-pulse rounded-full bg-surface-muted md:block" />
             ) : user ? (
-              <div className="relative hidden md:block" ref={profileRef}>
-                <button
-                  type="button"
-                  onClick={() => setProfileOpen((v) => !v)}
-                  className="flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-surface hover:text-foreground"
-                  aria-haspopup="menu"
-                  aria-expanded={profileOpen}
+              <div className="relative hidden md:flex items-center" ref={profileRef}>
+                <Link
+                  href="/dashboard"
+                  className="flex items-center gap-1.5 rounded-l-full px-3 py-2 text-sm font-semibold text-muted transition-colors hover:bg-surface hover:text-foreground"
                 >
                   <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/15 text-[11px] font-bold text-primary ring-1 ring-primary/20">
                     {initials(user)}
                   </span>
                   <span className="max-w-[8rem] truncate">{user.first_name || user.username}</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setProfileOpen((v) => !v)}
+                  className="flex items-center rounded-r-full px-2 py-2 text-muted transition-colors hover:bg-surface hover:text-foreground"
+                  aria-haspopup="menu"
+                  aria-expanded={profileOpen}
+                  aria-label="Open profile menu"
+                >
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`h-3.5 w-3.5 transition-transform duration-200 ${profileOpen ? "rotate-180" : ""}`} aria-hidden="true">
                     <path d="m6 9 6 6 6-6" />
                   </svg>
@@ -156,10 +162,12 @@ export default function Navbar() {
                 {profileOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-56 overflow-hidden rounded-xl border border-border bg-surface p-1.5 shadow-lg"
+                    className="absolute right-0 top-full mt-2 w-56 overflow-hidden rounded-xl border border-border bg-surface p-1.5 shadow-lg"
                   >
                     <div className="border-b border-border px-2.5 py-2">
-                      <p className="truncate text-sm font-medium text-foreground">{user.first_name} {user.last_name}</p>
+                      <Link href="/dashboard" onClick={() => setProfileOpen(false)} className="block truncate text-sm font-medium text-foreground hover:text-primary">
+                        {user.first_name} {user.last_name}
+                      </Link>
                       <p className="truncate text-xs text-muted">@{user.username}</p>
                     </div>
                     <Link
@@ -169,6 +177,22 @@ export default function Navbar() {
                       className="mt-1 flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
                     >
                       Profile &amp; dashboard
+                    </Link>
+                    <Link
+                      href="/notifications"
+                      role="menuitem"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
+                    >
+                      Notifications
+                    </Link>
+                    <Link
+                      href="/inbox"
+                      role="menuitem"
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
+                    >
+                      Inbox
                     </Link>
                     <Link
                       href="/dashboard"
@@ -251,11 +275,19 @@ export default function Navbar() {
               ) : user ? (
                 <div className="space-y-1">
                   <div className="px-3 py-1.5">
-                    <p className="text-sm font-medium text-foreground">{user.first_name} {user.last_name}</p>
+                    <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="block text-sm font-medium text-foreground hover:text-primary">
+                      {user.first_name} {user.last_name}
+                    </Link>
                     <p className="text-xs text-muted">@{user.username}</p>
                   </div>
                   <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-muted hover:bg-surface-muted hover:text-foreground">
                     Profile &amp; dashboard
+                  </Link>
+                  <Link href="/notifications" onClick={() => setMobileOpen(false)} className="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-muted hover:bg-surface-muted hover:text-foreground">
+                    Notifications
+                  </Link>
+                  <Link href="/inbox" onClick={() => setMobileOpen(false)} className="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-muted hover:bg-surface-muted hover:text-foreground">
+                    Inbox
                   </Link>
                   <button type="button" onClick={handleLogout} className="flex w-full items-center rounded-lg px-3 py-2.5 text-left text-sm font-semibold text-danger hover:bg-danger/10">
                     Log out
