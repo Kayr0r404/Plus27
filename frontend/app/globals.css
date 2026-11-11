@@ -1,26 +1,98 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* App theme */
+  --background: #0d172b;
+  --foreground: #eef2f8;
+  --surface: #14223d;
+  --surface-muted: #1d2d4e;
+  --border: #243556;
+  --border-strong: #34486e;
+  --muted: #93a0b8;
+  --text-secondary: #c3cbda;
+
+  --primary: #13f391;
+  --primary-hover: #0ec878;
+  --primary-foreground: #0e1e3a;
+
+  --secondary: #00c0ab;
+  --secondary-hover: #00a896;
+  --violet: #9b6bf2;
+
+  --navy: #eef2f8;
+  --navy-hover: #ffffff;
+  --link: #4fe0ce;
+
+  --ring: rgba(0, 192, 171, 0.35);
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --success: #13c878;
+  --warning: #f59e0b;
+
+  --gradient-brand: linear-gradient(90deg, #13f391 0%, #00c0ab 45%, #9b6bf2 100%);
+  --shadow-glow-primary: 0 12px 30px -12px rgba(19, 243, 145, 0.45);
+  --shadow-glow-secondary: 0 12px 30px -12px rgba(0, 192, 171, 0.45);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-muted: var(--muted);
+  --color-text-secondary: var(--text-secondary);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-hover: var(--secondary-hover);
+  --color-violet: var(--violet);
+  --color-navy: var(--navy);
+  --color-navy-hover: var(--navy-hover);
+  --color-link: var(--link);
+  --color-ring: var(--ring);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --font-sans: var(--font-montserrat);
+  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #0d172b;
+    --foreground: #eef2f8;
+    --surface: #14223d;
+    --surface-muted: #1d2d4e;
+    --border: #243556;
+    --border-strong: #34486e;
+    --muted: #93a0b8;
+    --text-secondary: #c3cbda;
+    --primary: #13f391;
+    --primary-hover: #0ec878;
+    --primary-foreground: #0e1e3a;
+    --secondary: #00c0ab;
+    --secondary-hover: #00a896;
+    --violet: #9b6bf2;
+    --navy: #eef2f8;
+    --navy-hover: #ffffff;
+    --link: #4fe0ce;
+    --ring: rgba(0, 192, 171, 0.35);
+    --danger: #ef4444;
+    --danger-hover: #dc2626;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: rgba(19, 243, 145, 0.25);
+  color: #eef2f8;
 }

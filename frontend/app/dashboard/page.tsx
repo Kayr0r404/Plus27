@@ -149,8 +149,8 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="flex flex-1 items-center justify-center bg-zinc-50 py-27 dark:bg-black">
-        <span className="size-8 animate-spin rounded-full border-2 border-zinc-300 border-t-zinc-900 dark:border-zinc-700 dark:border-t-zinc-100" />
+      <div className="flex flex-1 items-center justify-center bg-background py-24">
+        <span className="size-8 animate-spin rounded-full border-2 border-border border-t-primary" />
       </div>
     );
   }
@@ -158,10 +158,10 @@ export default function DashboardPage() {
   if (!user) return null;
 
   return (
-    <div className="w-full bg-zinc-50 px-4 py-16 dark:bg-black">
+    <div className="w-full bg-background px-4 py-16">
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-8">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl font-semibold tracking-tight text-navy">Dashboard</h1>
           <Button variant="secondary" onClick={handleLogout}>
             Log out
           </Button>
@@ -171,42 +171,34 @@ export default function DashboardPage() {
           <Alert kind={saveMessage.type}>{saveMessage.text}</Alert>
         )}
 
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
           <div className="flex items-start gap-5">
             {user.avatar_url ? (
               // eslint-disable-next-line @next/next/no-img-element -- avatar is a user-supplied remote URL
               <img
                 src={user.avatar_url}
                 alt={`${user.first_name} ${user.last_name}`}
-                className="size-16 rounded-full object-cover ring-2 ring-zinc-200 dark:ring-zinc-700"
+                className="size-16 rounded-full object-cover ring-2 ring-primary/30"
               />
             ) : (
-              <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-zinc-200 text-xl font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200">
+              <div className="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary/15 text-xl font-semibold text-navy">
                 {initials(user)}
               </div>
             )}
             <div className="flex flex-col gap-0.5 overflow-hidden">
-              <h2 className="truncate text-lg font-medium">
+              <h2 className="truncate text-lg font-medium text-navy">
                 {user.first_name} {user.last_name}
               </h2>
-              <p className="truncate text-sm text-zinc-500 dark:text-zinc-400">
-                @{user.username}
-              </p>
-              <p className="truncate text-sm text-zinc-500 dark:text-zinc-400">
-                {user.email}
-              </p>
-              {user.sex && (
-                <p className="text-sm text-zinc-400 dark:text-zinc-500">
-                  {user.sex}
-                </p>
-              )}
+              <p className="truncate text-sm text-muted">@{user.username}</p>
+              <p className="truncate text-sm text-muted">{user.email}</p>
+              {user.sex && <p className="text-sm text-muted">{user.sex}</p>}
             </div>
           </div>
         </section>
 
-        <section className="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+        <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-medium">Profile</h3>
+            <h3 className="text-lg font-medium text-navy">Profile</h3>
             {!editing && (
               <Button variant="secondary" onClick={startEditing}>
                 Edit
@@ -300,40 +292,28 @@ export default function DashboardPage() {
           ) : (
             <dl className="mt-4 grid grid-cols-1 gap-4 text-sm sm:grid-cols-2">
               <div>
-                <dt className="font-medium text-zinc-500 dark:text-zinc-400">
-                  First name
-                </dt>
-                <dd className="mt-0.5">{user.first_name}</dd>
+                <dt className="font-medium text-muted">First name</dt>
+                <dd className="mt-0.5 text-foreground">{user.first_name}</dd>
               </div>
               <div>
-                <dt className="font-medium text-zinc-500 dark:text-zinc-400">
-                  Last name
-                </dt>
-                <dd className="mt-0.5">{user.last_name}</dd>
+                <dt className="font-medium text-muted">Last name</dt>
+                <dd className="mt-0.5 text-foreground">{user.last_name}</dd>
               </div>
               <div>
-                <dt className="font-medium text-zinc-500 dark:text-zinc-400">
-                  Username
-                </dt>
-                <dd className="mt-0.5">@{user.username}</dd>
+                <dt className="font-medium text-muted">Username</dt>
+                <dd className="mt-0.5 text-foreground">@{user.username}</dd>
               </div>
               <div>
-                <dt className="font-medium text-zinc-500 dark:text-zinc-400">
-                  Email
-                </dt>
-                <dd className="mt-0.5">{user.email}</dd>
+                <dt className="font-medium text-muted">Email</dt>
+                <dd className="mt-0.5 text-foreground">{user.email}</dd>
               </div>
               <div>
-                <dt className="font-medium text-zinc-500 dark:text-zinc-400">
-                  Sex
-                </dt>
-                <dd className="mt-0.5">{user.sex ?? "—"}</dd>
+                <dt className="font-medium text-muted">Sex</dt>
+                <dd className="mt-0.5 text-foreground">{user.sex ?? "—"}</dd>
               </div>
               <div>
-                <dt className="font-medium text-zinc-500 dark:text-zinc-400">
-                  Account ID
-                </dt>
-                <dd className="mt-0.5 truncate font-mono text-xs">
+                <dt className="font-medium text-muted">Account ID</dt>
+                <dd className="mt-0.5 truncate font-mono text-xs text-foreground">
                   {user.id}
                 </dd>
               </div>
@@ -341,11 +321,9 @@ export default function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-2xl border border-red-200 bg-white p-6 shadow-sm dark:border-red-900/40 dark:bg-zinc-900">
-          <h3 className="text-lg font-medium text-red-700 dark:text-red-400">
-            Danger zone
-          </h3>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        <section className="rounded-2xl border border-danger/30 bg-surface p-6 shadow-sm">
+          <h3 className="text-lg font-medium text-danger">Danger zone</h3>
+          <p className="mt-1 text-sm text-muted">
             Permanently delete your account and all associated data. This action
             cannot be undone.
           </p>

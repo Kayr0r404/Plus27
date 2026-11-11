@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -24,32 +21,29 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="flex min-h-full flex-col">
-        <header className="border-b border-zinc-200 dark:border-zinc-800">
+    <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-background text-foreground">
+        <header className="border-b border-border bg-surface/95 backdrop-blur">
           <nav className="mx-auto flex h-16 w-full max-w-3xl items-center justify-between px-4">
-            <Link href="/" className="text-lg font-semibold tracking-tight">
+            <Link href="/" className="text-lg font-semibold tracking-tight text-navy">
               Plus27
             </Link>
             <div className="flex items-center gap-1 text-sm">
               <Link
                 href="/dashboard"
-                className="rounded-lg px-3 py-2 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                className="rounded-lg px-3 py-2 text-muted transition-colors hover:bg-surface-muted hover:text-foreground"
               >
                 Dashboard
               </Link>
               <Link
                 href="/login"
-                className="rounded-lg px-3 py-2 text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-zinc-100"
+                className="rounded-lg px-3 py-2 text-muted transition-colors hover:bg-surface-muted hover:text-foreground"
               >
                 Log in
               </Link>
               <Link
                 href="/register"
-                className="rounded-lg bg-zinc-900 px-3 py-2 font-medium text-zinc-50 transition-colors hover:bg-zinc-700 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-white"
+                className="rounded-lg bg-primary px-3 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
               >
                 Create account
               </Link>

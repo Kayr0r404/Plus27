@@ -7,9 +7,9 @@ interface AlertProps {
 
 const kindStyles = {
   success:
-    "border-emerald-300 bg-emerald-50 text-emerald-900 dark:border-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-200",
+    "border-primary/30 bg-primary/10 text-foreground",
   error:
-    "border-red-300 bg-red-50 text-red-900 dark:border-red-800 dark:bg-red-950/50 dark:text-red-200",
+    "border-danger/30 bg-danger/10 text-danger",
 };
 
 export default function Alert({ kind, children }: AlertProps) {
