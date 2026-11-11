@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { Field, TextInput, SelectInput } from "@/components/Field";
 import Alert from "@/components/Alert";
-import { ApiError, registerUser } from "@/lib/api";
+import { ApiError, login, registerUser } from "@/lib/api";
 import type { CreateUserPayload } from "@/lib/api";
 
 interface FormState {
@@ -58,7 +58,8 @@ export default function RegisterPage() {
 
     try {
       await registerUser(payload);
-      router.push("/login?registered=1");
+      await login({ email: payload.email, password: payload.password });
+      router.replace("/dashboard");
     } catch (err) {
       const message =
         err instanceof ApiError ? err.message : "Failed to create account.";
