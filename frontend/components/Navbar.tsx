@@ -264,9 +264,6 @@ export default function Navbar() {
                     </Link>
                     <p className="text-xs text-muted">@{user.username}</p>
                   </div>
-                  <Link href="/dashboard" onClick={() => setMobileOpen(false)} className="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-muted hover:bg-surface-muted hover:text-foreground">
-                    Profile &amp; dashboard
-                  </Link>
                   <Link href="/notifications" onClick={() => setMobileOpen(false)} className="flex w-full items-center rounded-lg px-3 py-2.5 text-sm font-semibold text-muted hover:bg-surface-muted hover:text-foreground">
                     Notifications
                   </Link>
