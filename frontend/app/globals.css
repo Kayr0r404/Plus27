@@ -1,37 +1,73 @@
 @import "tailwindcss";
 
-:root {
-  /* App theme */
-  --background: #0d172b;
-  --foreground: #eef2f8;
-  --surface: #14223d;
-  --surface-muted: #1d2d4e;
-  --border: #243556;
-  --border-strong: #34486e;
-  --muted: #93a0b8;
-  --text-secondary: #c3cbda;
+:root,
+:root[data-theme="light"] {
+  /* Soft editorial light theme */
+  color-scheme: light;
+  --background: #f3efe8;
+  --foreground: #2f3437;
+  --surface: #fbf9f5;
+  --surface-muted: #efeae1;
+  --border: #ddd6ca;
+  --border-strong: #cfc6b8;
+  --muted: #6f6a63;
+  --text-secondary: #4e4a45;
 
-  --primary: #13f391;
-  --primary-hover: #0ec878;
-  --primary-foreground: #0e1e3a;
+  --primary: #134859;
+  --primary-hover: #3088a0;
+  --primary-foreground: #ffffff;
 
-  --secondary: #00c0ab;
-  --secondary-hover: #00a896;
-  --violet: #9b6bf2;
+  --secondary: #f55b03;
+  --secondary-hover: #d94f02;
+  --violet: #3088a0;
 
-  --navy: #eef2f8;
+  --navy: #134859;
+  --navy-hover: #0f3947;
+  --link: #1f6f84;
+
+  --ring: rgba(48, 136, 160, 0.28);
+  --danger: #c43a31;
+  --danger-hover: #a62f28;
+  --success: #2f7a45;
+  --warning: #c7921f;
+
+  --gradient-brand: linear-gradient(90deg, #134859 0%, #3088a0 100%);
+  --shadow-glow-primary: 0 10px 24px -14px rgba(19, 72, 89, 0.28);
+  --shadow-glow-secondary: 0 10px 24px -14px rgba(245, 91, 3, 0.2);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #111a1d;
+  --foreground: #e7ecea;
+  --surface: #182327;
+  --surface-muted: #1f2d32;
+  --border: #2a3a40;
+  --border-strong: #355058;
+  --muted: #9fb0b4;
+  --text-secondary: #c7d3d5;
+
+  --primary: #4caec4;
+  --primary-hover: #70c4d6;
+  --primary-foreground: #081518;
+
+  --secondary: #ff7a2f;
+  --secondary-hover: #ff9457;
+  --violet: #70c4d6;
+
+  --navy: #e7ecea;
   --navy-hover: #ffffff;
-  --link: #4fe0ce;
+  --link: #7fd3e3;
 
-  --ring: rgba(0, 192, 171, 0.35);
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --success: #13c878;
-  --warning: #f59e0b;
+  --ring: rgba(76, 174, 196, 0.35);
+  --danger: #ef6b63;
+  --danger-hover: #f08780;
+  --success: #57b87a;
+  --warning: #e0b24d;
 
-  --gradient-brand: linear-gradient(90deg, #13f391 0%, #00c0ab 45%, #9b6bf2 100%);
-  --shadow-glow-primary: 0 12px 30px -12px rgba(19, 243, 145, 0.45);
-  --shadow-glow-secondary: 0 12px 30px -12px rgba(0, 192, 171, 0.45);
+  --gradient-brand: linear-gradient(90deg, #1f5f70 0%, #4caec4 100%);
+  --shadow-glow-primary: 0 10px 24px -14px rgba(76, 174, 196, 0.3);
+  --shadow-glow-secondary: 0 10px 24px -14px rgba(255, 122, 47, 0.22);
 }
 
 @theme inline {
@@ -57,42 +93,27 @@
   --color-danger-hover: var(--danger-hover);
   --color-success: var(--success);
   --color-warning: var(--warning);
-  --font-sans: var(--font-montserrat);
-  --font-mono: "JetBrains Mono", "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0d172b;
-    --foreground: #eef2f8;
-    --surface: #14223d;
-    --surface-muted: #1d2d4e;
-    --border: #243556;
-    --border-strong: #34486e;
-    --muted: #93a0b8;
-    --text-secondary: #c3cbda;
-    --primary: #13f391;
-    --primary-hover: #0ec878;
-    --primary-foreground: #0e1e3a;
-    --secondary: #00c0ab;
-    --secondary-hover: #00a896;
-    --violet: #9b6bf2;
-    --navy: #eef2f8;
-    --navy-hover: #ffffff;
-    --link: #4fe0ce;
-    --ring: rgba(0, 192, 171, 0.35);
-    --danger: #ef4444;
-    --danger-hover: #dc2626;
-  }
+  --font-sans: var(--font-roboto);
+  --font-serif: var(--font-crimson-pro);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-crimson-pro), Georgia, "Times New Roman", serif;
 }
 
 ::selection {
-  background: rgba(19, 243, 145, 0.25);
-  color: #eef2f8;
+  background: rgba(48, 136, 160, 0.22);
+  color: var(--foreground);
 }

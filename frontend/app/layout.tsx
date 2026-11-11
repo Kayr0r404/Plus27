@@ -1,18 +1,27 @@
 import type { Metadata } from "next";
-import { Montserrat } from "next/font/google";
-import Link from "next/link";
+import { Crimson_Pro, Roboto } from "next/font/google";
+import Navbar from "@/components/Navbar";
 import "./globals.css";
 
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
+const crimsonPro = Crimson_Pro({
+  variable: "--font-crimson-pro",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const roboto = Roboto({
+  variable: "--font-roboto",
+  subsets: ["latin"],
+  weight: ["400", "500", "700", "900"],
+  style: ["normal", "italic"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "Plus27",
-  description: "Create an account and manage your Plus27 profile.",
+  description:
+    "Plus27 is a local community platform for discussions, marketplaces, vendors, odd jobs, and rentals in your area.",
 };
 
 export default function RootLayout({
@@ -21,35 +30,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${montserrat.variable} h-full antialiased`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${crimsonPro.variable} ${roboto.variable} h-full antialiased`}
+    >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('plus27-theme');var d=t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var theme=d?'dark':'light';document.documentElement.dataset.theme=theme;document.documentElement.style.colorScheme=theme;}catch(e){}})();`,
+          }}
+        />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
-        <header className="border-b border-border bg-surface/95 backdrop-blur">
-          <nav className="mx-auto flex h-16 w-full max-w-3xl items-center justify-between px-4">
-            <Link href="/" className="text-lg font-semibold tracking-tight text-navy">
-              Plus27
-            </Link>
-            <div className="flex items-center gap-1 text-sm">
-              <Link
-                href="/dashboard"
-                className="rounded-lg px-3 py-2 text-muted transition-colors hover:bg-surface-muted hover:text-foreground"
-              >
-                Dashboard
-              </Link>
-              <Link
-                href="/login"
-                className="rounded-lg px-3 py-2 text-muted transition-colors hover:bg-surface-muted hover:text-foreground"
-              >
-                Log in
-              </Link>
-              <Link
-                href="/register"
-                className="rounded-lg bg-primary px-3 py-2 font-medium text-primary-foreground transition-colors hover:bg-primary-hover"
-              >
-                Create account
-              </Link>
-            </div>
-          </nav>
-        </header>
+        <Navbar />
         <main className="flex flex-1">{children}</main>
       </body>
     </html>

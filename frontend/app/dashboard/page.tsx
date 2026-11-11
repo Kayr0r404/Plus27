@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import { Field, TextInput, SelectInput } from "@/components/Field";
 import Alert from "@/components/Alert";
+import ThemeSetting from "@/components/ThemeSetting";
 import {
   ApiError,
   getMe,
@@ -319,6 +320,20 @@ export default function DashboardPage() {
               </div>
             </dl>
           )}
+        </section>
+
+        <section className="rounded-2xl border border-border bg-surface p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h3 className="text-lg font-medium text-navy">Appearance</h3>
+              <p className="mt-1 text-sm text-muted">
+                Choose how Plus27 looks for you. This setting is saved on this device.
+              </p>
+            </div>
+          </div>
+          <div className="mt-4">
+            <ThemeSetting />
+          </div>
         </section>
 
         <section className="rounded-2xl border border-danger/30 bg-surface p-6 shadow-sm">
