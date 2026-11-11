@@ -47,23 +47,49 @@ export type Review = {
   recommends: boolean;
 };
 
-export type ForumThread = {
+export type MeetPost = {
+  id: string;
+  communitySlug: string;
+  author: string;
+  area: string;
+  time: string;
+  content: string;
+  tags: string[];
+  likes: number;
+  comments: number;
+};
+
+export type CommunityEvent = {
   id: string;
   communitySlug: string;
   title: string;
-  category: string;
-  author: string;
+  date: string;
+  time: string;
+  location: string;
   area: string;
-  replies: number;
-  views: number;
-  lastActive: string;
-  excerpt: string;
-  tags: string[];
+  host: string;
+  category: string;
+  description: string;
+  attendees: number;
 };
 
-export type ForumPost = {
+export type CommunityGroup = {
   id: string;
-  threadId: string;
+  communitySlug: string;
+  name: string;
+  category: string;
+  description: string;
+  members: number;
+  posts: number;
+  lastActive: string;
+  area: string;
+  tags: string[];
+  coverTone: "mint" | "teal" | "violet" | "navy";
+};
+
+export type GroupPost = {
+  id: string;
+  groupId: string;
   author: string;
   role?: string;
   time: string;
@@ -158,7 +184,7 @@ export const vendors: Vendor[] = [
     area: "Rampa Section",
     description: "Custom tees, caps, and streetwear drops inspired by local culture.",
     about:
-      "Independent clothing brand offering ready-to-wear items and custom prints for schools, teams, and events. New drops announced weekly in the community forum.",
+      "Independent clothing brand offering ready-to-wear items and custom prints for schools, teams, and events. New drops announced weekly in the community groups.",
     cover: "from-violet/30 via-primary/20 to-secondary/30",
     avatar: "SS",
     rating: 4.6,
@@ -297,91 +323,259 @@ export const reviews: Review[] = [
   { id: "r8", vendorId: "v7", author: "Sindi L.", rating: 4, date: "1 week ago", comment: "Good prices on uniforms and helpful staff.", recommends: true },
 ];
 
-export const forumThreads: ForumThread[] = [
+export const meetPosts: MeetPost[] = [
   {
-    id: "t1",
+    id: "m1",
     communitySlug: "daveyton",
-    title: "Weekend community clean-up at Daveyton Park",
-    category: "Community",
     author: "Nomsa D.",
     area: "Daveyton Central",
-    replies: 24,
-    views: 312,
-    lastActive: "35 min ago",
-    excerpt: "Looking for volunteers for Saturday morning. Gloves and bags provided, meet at the main gate at 08:00.",
-    tags: ["volunteer", "events"],
+    time: "20 min ago",
+    content:
+      "Morning neighbors! Anyone up for a casual walk at Daveyton Park later this afternoon? Would be great to meet a few new people from the area.",
+    tags: ["casual", "outdoors"],
+    likes: 12,
+    comments: 5,
   },
   {
-    id: "t2",
+    id: "m2",
     communitySlug: "daveyton",
-    title: "Recommendations for affordable school uniform suppliers?",
-    category: "Marketplace",
-    author: "Peter M.",
+    author: "Sipho K.",
     area: "Rampa Section",
-    replies: 18,
-    views: 540,
-    lastActive: "2 hours ago",
-    excerpt: "Need uniforms for two kids before next term. Any local vendors with good prices and quality?",
-    tags: ["schools", "vendors"],
+    time: "1 hour ago",
+    content:
+      "I’m new to the area and looking to connect with local creatives and small business owners. Feel free to say hi or send an invite!",
+    tags: ["connect", "small-business"],
+    likes: 18,
+    comments: 7,
   },
   {
-    id: "t3",
+    id: "m3",
     communitySlug: "daveyton",
-    title: "Load shedding schedule & backup charging spots",
-    category: "Local Info",
-    author: "Community Mod",
-    area: "Daveyton",
-    replies: 41,
-    views: 1204,
-    lastActive: "1 hour ago",
-    excerpt: "Share updated schedules and places where residents can safely charge devices during outages.",
-    tags: ["utilities", "tips"],
+    author: "Lerato M.",
+    area: "Etwatwa West",
+    time: "Today, 08:15",
+    content:
+      "Anyone interested in starting a weekend jogging group around Etwatwa? Beginners welcome. Drop a comment and I’ll send invites.",
+    tags: ["fitness", "meetup"],
+    likes: 9,
+    comments: 4,
   },
   {
-    id: "t4",
+    id: "m4",
     communitySlug: "soweto",
-    title: "Youth soccer tournament volunteers needed",
-    category: "Community",
     author: "Mandla S.",
     area: "Orlando West",
-    replies: 15,
-    views: 276,
-    lastActive: "50 min ago",
-    excerpt: "We need referees, coordinators, and vendors for next month’s local youth tournament.",
-    tags: ["sports", "events"],
+    time: "35 min ago",
+    content:
+      "Looking to connect with other parents around Orlando West for after-school activities and play dates. Let’s link up!",
+    tags: ["parents", "connect"],
+    likes: 14,
+    comments: 6,
   },
   {
-    id: "t5",
+    id: "m5",
     communitySlug: "soweto",
-    title: "Best places to source fresh produce in Orlando?",
-    category: "Marketplace",
     author: "Keletso R.",
     area: "Orlando East",
-    replies: 22,
-    views: 410,
-    lastActive: "3 hours ago",
-    excerpt: "Looking for recommendations for affordable and fresh produce vendors nearby.",
-    tags: ["vendors", "groceries"],
+    time: "2 hours ago",
+    content:
+      "Coffee meetup this Saturday morning near Vilakazi Street? Casual vibes, everyone welcome. Send me an invite if you’re keen.",
+    tags: ["meetup", "weekend"],
+    likes: 21,
+    comments: 11,
   },
   {
-    id: "t6",
+    id: "m6",
     communitySlug: "tembisa",
-    title: "Community market day: vendor applications",
-    category: "Vendors",
-    author: "Tembisa Forum",
+    author: "Sindi L.",
     area: "Tembisa Central",
-    replies: 9,
-    views: 198,
-    lastActive: "Today",
-    excerpt: "Local vendors can apply for stalls at the upcoming community market day. Share your products and availability.",
-    tags: ["market day", "small business"],
+    time: "Today, 09:40",
+    content:
+      "Hi Tembisa! I’m looking to meet other local vendors so we can support each other and share tips. Happy to connect.",
+    tags: ["vendors", "networking"],
+    likes: 7,
+    comments: 3,
   },
 ];
 
-export const forumPosts: ForumPost[] = [
+export const communityEvents: CommunityEvent[] = [
   {
-    id: "p1",
-    threadId: "t1",
+    id: "e1",
+    communitySlug: "daveyton",
+    title: "Weekend Community Clean-up",
+    date: "Sat, 18 Apr 2026",
+    time: "08:00 - 12:00",
+    location: "Daveyton Park, Main Gate",
+    area: "Daveyton Central",
+    host: "Daveyton Community Forum",
+    category: "Community",
+    description:
+      "Join neighbors to help clean and refresh the park. Gloves and refuse bags will be provided. All ages welcome.",
+    attendees: 34,
+  },
+  {
+    id: "e2",
+    communitySlug: "daveyton",
+    title: "Local Business Pop-up Market",
+    date: "Sun, 26 Apr 2026",
+    time: "10:00 - 15:00",
+    location: "Daveyton Mall Open Area",
+    area: "Daveyton Mall Area",
+    host: "Plus27 Local Vendors",
+    category: "Market",
+    description:
+      "Discover local food, fashion, crafts, and services from vendors in your area. Family-friendly with music and stalls.",
+    attendees: 58,
+  },
+  {
+    id: "e3",
+    communitySlug: "daveyton",
+    title: "Youth Skills & Career Day",
+    date: "Fri, 8 May 2026",
+    time: "09:00 - 14:00",
+    location: "Etwatwa Community Hall",
+    area: "Etwatwa West",
+    host: "Youth Connect Daveyton",
+    category: "Youth",
+    description:
+      "Workshops, career guidance, and local opportunities for young people. Meet mentors and learn about skills programs nearby.",
+    attendees: 46,
+  },
+  {
+    id: "e4",
+    communitySlug: "soweto",
+    title: "Soweto Youth Soccer Tournament",
+    date: "Sat, 2 May 2026",
+    time: "09:00 - 17:00",
+    location: "Orlando Stadium Grounds",
+    area: "Orlando West",
+    host: "Soweto Sports Collective",
+    category: "Sports",
+    description:
+      "A local youth soccer tournament with community teams, food vendors, and volunteer opportunities.",
+    attendees: 120,
+  },
+  {
+    id: "e5",
+    communitySlug: "soweto",
+    title: "Sunday Morning Coffee Meetup",
+    date: "Sun, 19 Apr 2026",
+    time: "09:30 - 11:30",
+    location: "Vilakazi Street Café Corner",
+    area: "Orlando East",
+    host: "Soweto Connect",
+    category: "Meetup",
+    description:
+      "A relaxed meetup for neighbors to connect, chat, and share local recommendations over coffee.",
+    attendees: 22,
+  },
+  {
+    id: "e6",
+    communitySlug: "tembisa",
+    title: "Tembisa Community Market Day",
+    date: "Sat, 25 Apr 2026",
+    time: "08:30 - 14:00",
+    location: "Tembisa Central Plaza",
+    area: "Tembisa Central",
+    host: "Tembisa Vendor Network",
+    category: "Market",
+    description:
+      "Support local businesses at the monthly community market. Vendors, food stalls, and family activities.",
+    attendees: 41,
+  },
+];
+
+export const communityGroups: CommunityGroup[] = [
+  {
+    id: "g1",
+    communitySlug: "daveyton",
+    name: "Daveyton Community Forum",
+    category: "General",
+    description:
+      "A group for local updates, questions, recommendations, and everyday conversations in Daveyton.",
+    members: 842,
+    posts: 156,
+    lastActive: "35 min ago",
+    area: "Daveyton",
+    tags: ["community", "updates", "local"],
+    coverTone: "mint",
+  },
+  {
+    id: "g2",
+    communitySlug: "daveyton",
+    name: "Daveyton Vendors & Buyers",
+    category: "Marketplace",
+    description:
+      "Connect with local vendors, share products and services, and find trusted recommendations from neighbors.",
+    members: 516,
+    posts: 98,
+    lastActive: "1 hour ago",
+    area: "Daveyton",
+    tags: ["vendors", "marketplace", "recommendations"],
+    coverTone: "teal",
+  },
+  {
+    id: "g3",
+    communitySlug: "daveyton",
+    name: "Etwatwa Parents Network",
+    category: "Family",
+    description:
+      "A support group for parents and guardians to share school info, activities, and local family resources.",
+    members: 274,
+    posts: 63,
+    lastActive: "Today",
+    area: "Etwatwa West",
+    tags: ["parents", "schools", "family"],
+    coverTone: "violet",
+  },
+  {
+    id: "g4",
+    communitySlug: "soweto",
+    name: "Orlando Connect",
+    category: "General",
+    description:
+      "Neighborhood group for Orlando residents to discuss local news, events, and community matters.",
+    members: 690,
+    posts: 121,
+    lastActive: "50 min ago",
+    area: "Orlando",
+    tags: ["community", "events", "local"],
+    coverTone: "navy",
+  },
+  {
+    id: "g5",
+    communitySlug: "soweto",
+    name: "Soweto Small Business Circle",
+    category: "Business",
+    description:
+      "A forum for entrepreneurs and local businesses to network, collaborate, and share opportunities.",
+    members: 338,
+    posts: 74,
+    lastActive: "3 hours ago",
+    area: "Soweto",
+    tags: ["business", "networking", "vendors"],
+    coverTone: "teal",
+  },
+  {
+    id: "g6",
+    communitySlug: "tembisa",
+    name: "Tembisa Local Forum",
+    category: "General",
+    description:
+      "Community group for Tembisa residents to share information, ask questions, and stay connected.",
+    members: 421,
+    posts: 88,
+    lastActive: "Today",
+    area: "Tembisa",
+    tags: ["community", "local", "support"],
+    coverTone: "mint",
+  },
+];
+
+export const groupPosts: GroupPost[] = [
+  {
+    id: "gp1",
+    groupId: "g1",
     author: "Nomsa D.",
     role: "Organizer",
     time: "Today, 08:10",
@@ -389,23 +583,31 @@ export const forumPosts: ForumPost[] = [
       "Hi everyone! We’re planning a clean-up this Saturday at Daveyton Park. We need about 20 volunteers. If you can join, please comment with your name and preferred time slot (08:00–10:00 or 10:00–12:00).",
   },
   {
-    id: "p2",
-    threadId: "t1",
+    id: "gp2",
+    groupId: "g1",
     author: "Sipho K.",
     time: "Today, 08:42",
     content: "Count me in for 08:00–10:00. I can also bring extra refuse bags.",
   },
   {
-    id: "p3",
-    threadId: "t1",
+    id: "gp3",
+    groupId: "g1",
     author: "Lerato M.",
     time: "Today, 09:15",
     content:
       "I’ll join 10:00–12:00. Can we also include the walkway near the taxi rank?",
   },
   {
-    id: "p4",
-    threadId: "t4",
+    id: "gp4",
+    groupId: "g2",
+    author: "Peter M.",
+    time: "2 hours ago",
+    content:
+      "Looking for recommendations for affordable school uniform suppliers in Daveyton. Any trusted vendors people can suggest?",
+  },
+  {
+    id: "gp5",
+    groupId: "g4",
     author: "Mandla S.",
     role: "Organizer",
     time: "Today, 07:55",
@@ -431,20 +633,28 @@ export function getReviewsByVendor(vendorId: string) {
   return reviews.filter((r) => r.vendorId === vendorId);
 }
 
-export function getThreadById(id: string) {
-  return forumThreads.find((t) => t.id === id);
+export function getGroupById(id: string) {
+  return communityGroups.find((g) => g.id === id);
 }
 
-export function getPostsByThread(threadId: string) {
-  return forumPosts.filter((p) => p.threadId === threadId);
+export function getPostsByGroup(groupId: string) {
+  return groupPosts.filter((p) => p.groupId === groupId);
 }
 
 export function getVendorsByCommunity(communitySlug: string) {
   return vendors.filter((v) => v.communitySlug === communitySlug);
 }
 
-export function getThreadsByCommunity(communitySlug: string) {
-  return forumThreads.filter((t) => t.communitySlug === communitySlug);
+export function getGroupsByCommunity(communitySlug: string) {
+  return communityGroups.filter((g) => g.communitySlug === communitySlug);
+}
+
+export function getMeetPostsByCommunity(communitySlug: string) {
+  return meetPosts.filter((p) => p.communitySlug === communitySlug);
+}
+
+export function getEventsByCommunity(communitySlug: string) {
+  return communityEvents.filter((e) => e.communitySlug === communitySlug);
 }
 
 export function getProductsByCommunity(communitySlug: string) {
@@ -621,12 +831,14 @@ export function getRentalsByCommunity(communitySlug: string) {
 export function getCommunityStats(communitySlug: string) {
   const localVendors = getVendorsByCommunity(communitySlug);
   const localProducts = getProductsByCommunity(communitySlug);
-  const localThreads = getThreadsByCommunity(communitySlug);
+  const localGroups = getGroupsByCommunity(communitySlug);
+  const localEvents = getEventsByCommunity(communitySlug);
   const localJobs = getJobsByCommunity(communitySlug);
   const localRentals = getRentalsByCommunity(communitySlug);
   return [
     { label: "Local vendors", value: String(localVendors.length) },
-    { label: "Open discussions", value: String(localThreads.length) },
+    { label: "Community groups", value: String(localGroups.length) },
+    { label: "Events", value: String(localEvents.length) },
     { label: "Odd jobs", value: String(localJobs.length) },
     { label: "Rentals", value: String(localRentals.length) },
   ];

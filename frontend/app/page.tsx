@@ -5,11 +5,11 @@ type Props = { searchParams: Promise<{ area?: string }> };
 
 const features = [
   {
-    title: "Local discussion forums",
+    title: "Community hub",
     description:
-      "Give every community its own space to talk, share updates, ask for help, and stay connected on what matters nearby.",
-    href: "/forum",
-    cta: "Explore forums",
+      "Give every community a space to meet, share casual posts, connect with others, discover local events, and join forums (groups).",
+    href: "/community",
+    cta: "Explore community",
   },
   {
     title: "Community marketplace",
@@ -80,11 +80,11 @@ export default async function Home({ searchParams }: Props) {
               One platform for your community to <span className="text-primary">talk, trade, hire, and find home</span>.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-text-secondary">
-              Plus27 brings local life into one place. Each community gets its own forum, marketplace, vendor stores, odd jobs board, and rental listings, so people see what’s relevant to their area first.
+              Plus27 brings local life into one place. Each community gets its own community hub, marketplace, vendor stores, odd jobs board, and rental listings, so people see what’s relevant to their area first.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <Link
-                href={`/forum?area=${selected.slug}`}
+                href={`/community?area=${selected.slug}`}
                 className="inline-flex h-12 items-center justify-center rounded-xl bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
               >
                 Explore {selected.name}
@@ -112,7 +112,7 @@ export default async function Home({ searchParams }: Props) {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted">Inside Plus27</p>
               <div className="mt-4 grid gap-3 sm:grid-cols-2">
                 {[
-                  { label: "Forum", value: "Community discussions" },
+                  { label: "Community", value: "Meet, events & forums" },
                   { label: "Marketplace", value: "Local products & services" },
                   { label: "Vendors", value: "Stores, ratings & reviews" },
                   { label: "Jobs", value: "Odd jobs nearby" },
@@ -176,7 +176,7 @@ export default async function Home({ searchParams }: Props) {
             <p className="mt-2 flex-1 text-sm leading-7 text-text-secondary">
               Communities are different. Plus27 is built so each area can have its own activity and identity while still making it easy to search and discover others when you choose to.
             </p>
-            <Link href={`/forum?area=${selected.slug}`} className="mt-4 inline-flex text-sm font-semibold text-primary hover:underline">
+            <Link href={`/community?area=${selected.slug}`} className="mt-4 inline-flex text-sm font-semibold text-primary hover:underline">
               See a local example
             </Link>
           </article>
@@ -220,7 +220,7 @@ export default async function Home({ searchParams }: Props) {
               Explore an area-based experience
             </h2>
             <p className="mt-3 text-base leading-7 text-muted">
-              Pick a community to see how Plus27 brings local forums, vendors, marketplace listings, odd jobs, and rentals together. Daveyton is shown here as an example.
+              Pick a community to see how Plus27 brings local meetups, events, forums (groups), vendors, marketplace listings, odd jobs, and rentals together. Daveyton is shown here as an example.
             </p>
           </div>
           <Link href="/register" className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-semibold text-primary-foreground hover:bg-primary-hover">
@@ -249,7 +249,7 @@ export default async function Home({ searchParams }: Props) {
                 </div>
                 <p className="mt-3 text-sm leading-7 text-text-secondary">{community.description}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
-                  <Link href={`/forum?area=${community.slug}`} className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-muted">Forum</Link>
+                  <Link href={`/community?area=${community.slug}`} className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-muted">Community</Link>
                   <Link href={`/vendors?area=${community.slug}`} className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-muted">Vendors</Link>
                   <Link href={`/marketplace?area=${community.slug}`} className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-muted">Marketplace</Link>
                   <Link href={`/jobs?area=${community.slug}`} className="rounded-lg border border-border bg-background px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-muted">Jobs</Link>

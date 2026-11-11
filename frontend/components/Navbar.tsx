@@ -8,7 +8,7 @@ import type { User } from "@/lib/api";
 
 const navItems = [
   { href: "/", label: "Home" },
-  { href: "/forum", label: "Forum" },
+  { href: "/community", label: "Community" },
   { href: "/marketplace", label: "Marketplace" },
   { href: "/vendors", label: "Vendors" },
   { href: "/jobs", label: "Jobs" },
