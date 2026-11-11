@@ -171,18 +171,10 @@ export default function Navbar() {
                       <p className="truncate text-xs text-muted">@{user.username}</p>
                     </div>
                     <Link
-                      href="/dashboard"
-                      role="menuitem"
-                      onClick={() => setProfileOpen(false)}
-                      className="mt-1 flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
-                    >
-                      Profile &amp; dashboard
-                    </Link>
-                    <Link
                       href="/notifications"
                       role="menuitem"
                       onClick={() => setProfileOpen(false)}
-                      className="flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
+                      className="mt-1 flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
                     >
                       Notifications
                     </Link>
@@ -193,14 +185,6 @@ export default function Navbar() {
                       className="flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
                     >
                       Inbox
-                    </Link>
-                    <Link
-                      href="/dashboard"
-                      role="menuitem"
-                      onClick={() => setProfileOpen(false)}
-                      className="flex items-center rounded-lg px-2.5 py-2 text-sm text-foreground hover:bg-surface-muted"
-                    >
-                      Account settings
                     </Link>
                     <button
                       type="button"
