@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Crimson_Pro, Roboto } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 const crimsonPro = Crimson_Pro({
@@ -45,6 +46,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <Navbar />
         <main className="flex flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
