@@ -92,9 +92,11 @@ export default async function CommunityPage({ searchParams }: Props) {
                       </div>
                       <button
                         type="button"
-                        className="inline-flex h-9 items-center justify-center rounded-lg border border-border bg-background px-3 text-sm font-medium text-foreground hover:bg-surface-muted"
+                        title="Connect"
+                        aria-label="Connect"
+                        className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-background text-lg font-medium text-foreground hover:bg-surface-muted"
                       >
-                        Send invite
+                        +
                       </button>
                     </div>
                     <p className="mt-3 text-sm leading-7 text-text-secondary">{post.content}</p>
