@@ -6,54 +6,50 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import Button from "@/components/Button";
-import { Field, TextInput, SelectInput } from "@/components/Field";
+import { Field, TextInput } from "@/components/Field";
 import Alert from "@/components/Alert";
 import { ApiError, login, registerUser } from "@/lib/api";
 import type { CreateUserPayload } from "@/lib/api";
 
-interface FormState {
-  first_name: string;
-  last_name: string;
-  username: string;
-  email: string;
-  password: string;
-  sex: "" | "Male" | "Female";
-  avatar_url: string;
+function deriveUsername(email: string) {
+  const local = email.split("@")[0] ?? "";
+  const base = local.toLowerCase().replace(/[^a-z0-9]/g, "") || "user";
+  const suffix = Math.random().toString(36).slice(2, 6);
+  return `${base}${suffix}`;
 }
 
-const initialState: FormState = {
-  first_name: "",
-  last_name: "",
-  username: "",
-  email: "",
-  password: "",
-  sex: "",
-  avatar_url: "",
-};
+function deriveName(email: string) {
+  const local = email.split("@")[0] ?? "";
+  const cleaned = local.replace(/[._-]+/g, " ").trim();
+  const parts = cleaned.split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return { first_name: "Plus27", last_name: "Member" };
+  const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+  if (parts.length === 1) return { first_name: cap(parts[0]), last_name: "Member" };
+  return { first_name: cap(parts[0]), last_name: cap(parts.slice(1).join(" ")) };
+}
 
 export default function RegisterPage() {
   const router = useRouter();
-  const [form, setForm] = useState<FormState>(initialState);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  function updateField(field: keyof FormState, value: string) {
-    setForm((prev) => ({ ...prev, [field]: value }));
-  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
     setSubmitting(true);
 
+    const trimmedEmail = email.trim();
+    const { first_name, last_name } = deriveName(trimmedEmail);
     const payload: CreateUserPayload = {
-      first_name: form.first_name.trim(),
-      last_name: form.last_name.trim(),
-      username: form.username.trim(),
-      email: form.email.trim(),
-      password: form.password,
-      sex: form.sex === "" ? null : form.sex,
-      avatar_url: form.avatar_url.trim() || null,
+      first_name,
+      last_name,
+      username: deriveUsername(trimmedEmail),
+      email: trimmedEmail,
+      password,
+      sex: null,
+      avatar_url: null,
     };
 
     try {
@@ -75,42 +71,10 @@ export default function RegisterPage() {
           <h1 className="text-2xl font-semibold tracking-tight text-navy">
             Create your account
           </h1>
-          <p className="mt-1 text-sm text-muted">Join Plus27 in under a minute.</p>
+          <p className="mt-1 text-sm text-muted">Join Plus27 with just your email and a password.</p>
 
           <form onSubmit={handleSubmit} className="mt-8 flex flex-col gap-4">
             {error && <Alert kind="error">{error}</Alert>}
-
-            <div className="grid grid-cols-2 gap-4">
-              <Field label="First name">
-                <TextInput
-                  name="first_name"
-                  required
-                  placeholder="Jane"
-                  value={form.first_name}
-                  onChange={(e) => updateField("first_name", e.target.value)}
-                />
-              </Field>
-              <Field label="Last name">
-                <TextInput
-                  name="last_name"
-                  required
-                  placeholder="Doe"
-                  value={form.last_name}
-                  onChange={(e) => updateField("last_name", e.target.value)}
-                />
-              </Field>
-            </div>
-
-            <Field label="Username" hint="Lowercase letters and numbers only.">
-              <TextInput
-                name="username"
-                required
-                autoCapitalize="none"
-                placeholder="janedoe"
-                value={form.username}
-                onChange={(e) => updateField("username", e.target.value)}
-              />
-            </Field>
 
             <Field label="Email">
               <TextInput
@@ -119,8 +83,8 @@ export default function RegisterPage() {
                 required
                 autoComplete="email"
                 placeholder="jane@example.com"
-                value={form.email}
-                onChange={(e) => updateField("email", e.target.value)}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Field>
 
@@ -131,34 +95,15 @@ export default function RegisterPage() {
                 required
                 minLength={8}
                 autoComplete="new-password"
-                value={form.password}
-                onChange={(e) => updateField("password", e.target.value)}
+                placeholder="Create a password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Field>
 
-            <Field label="Sex (optional)">
-              <SelectInput
-                name="sex"
-                value={form.sex}
-                onChange={(e) =>
-                  updateField("sex", e.target.value as FormState["sex"])
-                }
-              >
-                <option value="">Prefer not to say</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </SelectInput>
-            </Field>
-
-            <Field label="Avatar URL (optional)">
-              <TextInput
-                name="avatar_url"
-                type="url"
-                placeholder="https://example.com/avatar.png"
-                value={form.avatar_url}
-                onChange={(e) => updateField("avatar_url", e.target.value)}
-              />
-            </Field>
+            <p className="text-xs leading-5 text-muted">
+              We&apos;ll create your profile with the minimum details now. You can update your name, username, and avatar anytime from your dashboard.
+            </p>
 
             <Button type="submit" loading={submitting} className="mt-2 w-full">
               Create account
